@@ -12,7 +12,7 @@ export class UserRepository {
     if (!email) {
       return null;
     }
-    return this.prisma.user.findFirst({
+    return await this.prisma.user.findFirst({
       where: {
         email: email,
       },
@@ -23,14 +23,14 @@ export class UserRepository {
     if (!id) {
       return null;
     }
-    return this.prisma.user.findUnique({
+    return await this.prisma.user.findUnique({
       where: { id },
     });
   }
 
   async create(data: CreateUserDto): Promise<User> {
     const hashedPassword = await bcrypt.hash(data.password, 10);
-    return this.prisma.user.create({
+    return await this.prisma.user.create({
       data: {
         email: data.email,
         password: hashedPassword,
@@ -40,7 +40,7 @@ export class UserRepository {
   }
 
   async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany({
+    return await this.prisma.user.findMany({
       orderBy: {
         id: 'asc',
       },
@@ -49,9 +49,9 @@ export class UserRepository {
 
   async search(query: string): Promise<User[]> {
     if (!query) {
-      return this.findAll();
+      return await this.findAll();
     }
-    return this.prisma.user.findMany({
+    return await this.prisma.user.findMany({
       where: {
         OR: [{ email: { contains: query, mode: 'insensitive' } }],
       },
