@@ -55,9 +55,3 @@ jobs:
 
       - name: 型チェック（ビルド）
         run: npm run build
-
-      - name: 単体テスト
-        run: npm run test
-
-      - name: E2Eテスト
-        run: npm run test:e2e

@@ -16,4 +16,4 @@ async function startApplication(): Promise<void> {
   });
   await app.listen(3003, '0.0.0.0');
 }
-startApplication();
+void startApplication();
