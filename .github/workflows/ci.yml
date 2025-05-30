@@ -81,4 +81,4 @@ jobs:
         run: npm run build
 
       - name: Run unit tests
-        run: npm run test -- --passWithNoTestss
+        run: npm run test
