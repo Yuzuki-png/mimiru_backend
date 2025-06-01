@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../users/users.service';
+import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/auth.dto';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 import { User } from '@prisma/client';
 
 type UserResponse = Omit<User, 'password'>;
@@ -15,7 +15,7 @@ interface TokenResponse {
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService,
+    private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -23,7 +23,7 @@ export class AuthService {
     email: string,
     pass: string,
   ): Promise<UserResponse | null> {
-    const user = await this.usersService.findByEmail(email);
+    const user = await this.userService.findByEmail(email);
     if (!user) {
       return null;
     }
@@ -31,8 +31,7 @@ export class AuthService {
     if (!isPasswordValid) {
       return null;
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...result } = user;
+    const { password: _, ...result } = user;
     return result;
   }
 
@@ -47,9 +46,8 @@ export class AuthService {
   }
 
   async registerUser(createUserDto: CreateUserDto): Promise<TokenResponse> {
-    const newUser = await this.usersService.createUser(createUserDto);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userInfo } = newUser;
+    const newUser = await this.userService.createUser(createUserDto);
+    const { password: _, ...userInfo } = newUser;
     return this.generateToken(userInfo);
   }
 

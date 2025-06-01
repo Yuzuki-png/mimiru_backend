@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { PrismaService } from '../../prisma/prisma.service';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -28,7 +28,7 @@ export class UserRepository {
     });
   }
 
-  async create(data: CreateUserDto): Promise<User> {
+  async createUser(data: CreateUserDto): Promise<User> {
     const hashedPassword = await bcrypt.hash(data.password, 10);
     return await this.prisma.user.create({
       data: {
@@ -39,7 +39,7 @@ export class UserRepository {
     });
   }
 
-  async findAll(): Promise<User[]> {
+  async findAllUsers(): Promise<User[]> {
     return await this.prisma.user.findMany({
       orderBy: {
         id: 'asc',
@@ -47,9 +47,9 @@ export class UserRepository {
     });
   }
 
-  async search(query: string): Promise<User[]> {
+  async searchUsers(query: string): Promise<User[]> {
     if (!query) {
-      return await this.findAll();
+      return await this.findAllUsers();
     }
     return await this.prisma.user.findMany({
       where: {

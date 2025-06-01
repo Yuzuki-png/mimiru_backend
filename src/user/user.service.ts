@@ -1,10 +1,10 @@
 import { Injectable, ConflictException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '@prisma/client';
-import { UserRepository } from './repositories/user.repository';
+import { UserRepository } from './user.repository';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async findByEmail(email: string): Promise<User | null> {
@@ -15,12 +15,12 @@ export class UsersService {
     return this.userRepository.findById(id);
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userRepository.findAll();
+  async findAllUsers(): Promise<User[]> {
+    return this.userRepository.findAllUsers();
   }
 
-  async search(query: string): Promise<User[]> {
-    return this.userRepository.search(query);
+  async searchUsers(query: string): Promise<User[]> {
+    return this.userRepository.searchUsers(query);
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
@@ -28,6 +28,6 @@ export class UsersService {
     if (existingUser) {
       throw new ConflictException('メールアドレスはすでに使用されています');
     }
-    return this.userRepository.create(createUserDto);
+    return this.userRepository.createUser(createUserDto);
   }
 }
