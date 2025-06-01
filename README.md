@@ -1,16 +1,6 @@
-# Radio Site Backend
+# mimiru_api
 
 NestJSで構築されたラジオサイトのバックエンドアプリケーション
-
-## システム構成
-
-### データベース構成
-
-本システムは以下のデータベースを使用しています：
-
-- メインDB (PostgreSQL)
-  - 開発環境: Dockerコンテナ or npm
-  - テスト環境: 専用のテストデータベースを使用
 
 ## 必要要件
 
@@ -30,20 +20,7 @@ NestJSで構築されたラジオサイトのバックエンドアプリケー�
 4. "Show Recommended Extensions" をクリック
 5. "WORKSPACE RECOMMENDATIONS" に記載されている拡張機能をインストール
 
-### 2. リポジトリのクローン
-
-```bash
-git clone [repository-url]
-cd radio_site_backend
-```
-
-### 3. 依存パッケージのインストール
-
-```bash
-npm install
-```
-
-### 4. 環境変数の設定
+### 2. 環境変数の設定
 
 `.env`ファイルをプロジェクトルートに作成し、以下の内容を設定：
 
@@ -60,35 +37,33 @@ TEST_DATABASE_URL="postgresql://postgres:postgres@localhost:5432/radio_site_test
 
 ### 開発環境での起動手順
 
-1. データベース（PostgreSQLコンテナ）の起動
+1. データベースの起動
+
 ```bash
 docker compose up -d
 ```
 
 2. 依存パッケージのインストール（初回、またはパッケージ追加時）
+
 ```bash
 npm install
 ```
 
 3. データベースマイグレーションの実行
+
 ```bash
 npx prisma migrate deploy
 ```
 
-4. アプリケーションの起動（以下のいずれかを選択）
-   - VSCodeでデバッグ実行（推奨）
-     - `F5`キーを押下
-     - または、デバッグパネルから「Launch Program」を選択
-   - ターミナルで実行
-     ```bash
-     npm run start:dev
-     ```
+4. アプリケーションの起動
 
-5. アプリケーションの停止
-   - VSCode: デバッグを停止
-   - ターミナル: `Ctrl + C`
+```bash
+npm run start
+```
+
 
 6. データベースの停止
+
 ```bash
 docker compose down
 ```
