@@ -1,6 +1,9 @@
+# build stage
 FROM node:20-alpine AS builder
 
 WORKDIR /app
+
+RUN apk add --no-cache tzdata tini
 
 COPY package*.json ./
 RUN npm install
@@ -8,6 +11,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 
+# production stage
 FROM node:20-alpine
 
 WORKDIR /app
@@ -21,8 +25,7 @@ COPY --from=builder /app/scripts ./scripts
 
 RUN npm install --only=production
 RUN npx prisma generate
-RUN chmod +x ./scripts/migrate-and-start.sh
 
 EXPOSE 3000
 
-CMD ["./scripts/migrate-and-start.sh"] 
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
